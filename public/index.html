@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html ng-app="isnewer">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Optimize mobile viewport -->
+    <title>Which commit is newer?</title>
+    <!-- load bootstrap -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+    <!-- load jquery -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <!-- load angular -->
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
+    <script src="core.js"></script>
+</head>
+<body ng-controller="mainController">
+    <div class="container">
+
+        <div ng-show="hasResult">
+            {{result}}
+        </div>
+
+        <div id="sha-form" class="row">
+            <form>
+                <div class="form-group">
+                    <input type="text" class="form-control input-lg text-center" placeholder="older commit" ng-model="formData.ancestor">
+                    <input type="text" class="form-control input-lg text-center" placeholder="newer commit" ng-model="formData.descendant">
+                </div>
+                <button type="submit" class="btn btn-primary btn-large" ng-click="checkIsNewer()">Check</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
