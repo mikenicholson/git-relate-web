@@ -8,6 +8,7 @@ var express = require('express'),
 var app = express();
 
 app.use(bodyparser.json());
+app.use(morgan('dev'))
 
 app.post('/api/isnewer', function (req, res) {
     ancestor = req.body.ancestor;
