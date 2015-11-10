@@ -1,0 +1,23 @@
+{
+  "name": "is-newer-app",
+  "description": "",
+  "main": "server.js",
+  "authors": [
+    "Mike Nicholson <themikenicholson@gmail.com>"
+  ],
+  "license": "ISC",
+  "moduleType": [],
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4.7",
+    "jquery": "~2.1.4",
+    "bootstrap": "~3.3.5"
+  }
+}

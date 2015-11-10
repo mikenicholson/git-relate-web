@@ -1,6 +1,6 @@
 var isNewer = angular.module('isnewer', []);
 
-function mainController($scope, $http) {
+isNewer.controller('mainController', function ($scope, $http) {
     $scope.formData = {};
     $scope.hasResult = false;
     $scope.result = "";
@@ -23,4 +23,4 @@ function mainController($scope, $http) {
             });
     };
 
-}
+});
