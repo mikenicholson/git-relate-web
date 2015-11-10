@@ -4,6 +4,7 @@ var express = require('express'),
     child_process = require('child_process'),
     util = require('util'),
     morgan = require('morgan');
+    nodegit = require('nodegit');
 
 var app = express();
 
@@ -28,6 +29,38 @@ app.post('/api/isnewer', function (req, res) {
         res.send({result: result}); 
     });
 
+});
+
+
+app.get('/api/commit/:commit_id', function(req, res) {
+    console.log("Looking up data for commit id: " + req.params.commit_id);
+    var repo = nodegit.Repository.open(config.repo_dir);
+    var commit_spec = req.params.commit_id;
+    repo.then(function (repo) {
+        nodegit.Revparse.single(repo, req.params.commit_id).then(function(object) {
+            if (object.type() === nodegit.Object.TYPE.COMMIT) {
+                return nodegit.Commit.lookup(repo, object.id());
+            } else {
+                throw Error(commit_spec + " does not represent a valid git commit");
+            }
+        }).then(function (commit) {
+            console.log(commit.summary());
+            commit_json = {
+                author_name: commit.author().name(),
+                author_email: commit.author().email(),
+                date: commit.date(),
+                message: commit.message(),
+                id: commit.id().tostrS()
+            };
+            res.json(commit_json);
+        }).catch(function(error){
+            res.status(404)
+            res.json({error: commit_spec + " does not name a valid git commit."});
+        });
+    }).catch(function(error) {
+        res.status(500)
+        res.json({error: error});
+    });
 });
 
 app.get('*', function(req, res) {
