@@ -5,6 +5,7 @@
     <title>Which commit is newer?</title>
     <!-- load bootstrap -->
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="custom.css">
     <!-- load jquery -->
     <script src="/bower_components/jquery/dist/jquery.min.js"></script>
     <!-- load angular -->
@@ -17,16 +18,35 @@
         <div ng-show="hasResult">
             {{result}}
         </div>
-
-        <div id="sha-form" class="row">
+       <div class="row text-center">
+            <h3>{{bannerMessage}}</h3>
+       </div>
+       <div class="row">
             <form>
-                <div class="form-group">
-                    <input type="text" class="form-control input-lg text-center" placeholder="older commit" ng-model="formData.ancestor">
-                    <input type="text" class="form-control input-lg text-center" placeholder="newer commit" ng-model="formData.descendant">
+                <div class="col-xs-6">
+                    <input type="text" placeholder="Old Commit" class="input-lg text-center col-centered" ng-model="formData.ancestor" ng-change="updateAncestor()" ng-model-options="{ debounce: 300 }"></input>
                 </div>
-                <button type="submit" class="btn btn-primary btn-large" ng-click="checkIsNewer()">Check</button>
+                <div class="col-xs-6">
+                    <input type="text" placeholder="New Commit" class="col-centered input-lg text-center" ng-model="formData.descendant" ng-change="updateDescendant()"></input>
+                </div>
             </form>
         </div>
-    </div>
+
+        <div class="row">
+            <div class="col-xs-6">
+                id: {{commit1.id}}<br/>
+                author: {{commit1.author_name}}<br/>
+                date: {{commit1.date | date:'medium'}}<br/>
+                message: <pre>{{commit1.message}}</pre><br/>
+            </div>
+            <div class="col-xs-6">
+                id: {{commit2.id}}<br/>
+                author: {{commit2.author_name}}<br/>
+                date: {{commit2.date | date:'medium'}}<br/>
+                message: <pre>{{commit2.message}}</pre><br/>
+            </div>  
+        </div> <!-- row -->
+
+    </div> <!-- contianer -->
 </body>
 </html>
