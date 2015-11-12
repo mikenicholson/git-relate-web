@@ -1,7 +1,8 @@
 {
-  "name": "is-newer-app",
+  "name": "git-relate-web",
+  "repository": "https://github.com/themikenicholson/git-relate-web.git",
   "version": "0.0.1",
-  "description": "",
+  "description": "Web applicaiton to determine if one commit is newer than another",
   "main": "server.js",
   "dependencies": {
     "body-parser": "^1.14.1",

@@ -1,5 +1,5 @@
 var config = {
-    repo_dir: "/Users/mike/Projects/passport-jwt",
+    repo_dir: "",
 };
 
 module.exports = config

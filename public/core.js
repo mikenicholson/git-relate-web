@@ -1,4 +1,4 @@
-var isNewer = angular.module('isnewer', []);
+var isNewer = angular.module('relate', []);
 
 isNewer.controller('mainController', function ($scope, $http) {
     var DEFAULT_BANNER = "Enter two commits to compare them"
@@ -9,7 +9,7 @@ isNewer.controller('mainController', function ($scope, $http) {
     $scope.bannerMessage = DEFAULT_BANNER;
 
     $scope.checkIsNewer = function(callback) {
-        $http.post('/api/isnewer', $scope.formData)
+        $http.post('/api/relate', $scope.formData)
             .success(function(data) {
                 ancestor = $scope.formData.ancestor;
                 descendant = $scope.formData.descendant;

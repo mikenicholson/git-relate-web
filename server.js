@@ -13,7 +13,7 @@ app.use('/bower_components', express.static(__dirname + '/bower_components'));
 app.use(bodyparser.json());
 app.use(morgan('dev'))
 
-app.post('/api/isnewer', function (req, res) {
+app.post('/api/relate', function (req, res) {
     ancestor = req.body.ancestor;
     descendant = req.body.descendant;
 
