@@ -1,6 +1,4 @@
-# --------------------
 # OSX Files
-# --------------------
 .DS_Store
 .AppleDouble
 .LSOverride
@@ -9,9 +7,8 @@ Icon
 .Spotlight-V100
 .Trashes
 
-# --------------------
 # Eclipse or Nodeclipse "Enide Studio" Files
-# --------------------
+#
 # recommended to add to Git SCM
 # or generate with `nodeclipse -p` command
 .project
@@ -19,17 +16,13 @@ Icon
 .*.md.html
 
 
-# --------------------
 # IntelliJ Files
-# --------------------
 *.iml
 *.ipr
 *.iws
 .idea/
 
-# --------------------
 # Netbeans Files
-# --------------------
 nbproject/private/
 build/
 nbbuild/
@@ -38,27 +31,19 @@ nbdist/
 nbactions.xml
 nb-configuration.xml
 
-# --------------------
 # Node Files
-# --------------------
 .nodemonignore
 npm-debug.log
 node_modules/
 
-# --------------------
 # SASS Files
-# --------------------
 .sass-cache/
 
-# --------------------
 # Bower Files
-# --------------------
 .bower-*/
 bower_components
 
-# --------------------
 # App Files
-# --------------------
 data/
 tests/results/**
 modules/public/
@@ -67,8 +52,7 @@ modules/views/
 /packages/contrib/
 /packages/**/**/public/assets/lib
 
+# App Data
 
-# --------------------
 # vim Files
-# --------------------
 *.swp

@@ -3,8 +3,11 @@ var express = require('express'),
     config = require('./config'),
     child_process = require('child_process'),
     util = require('util'),
-    morgan = require('morgan');
-    nodegit = require('nodegit');
+    morgan = require('morgan'),
+    nodegit = require('nodegit'),
+    RepoCloner = require('./lib/repocloner.js');
+
+var repo = new RepoCloner(config.repo_url, config.data_dir, config.authOpts).repo();
 
 var app = express();
 
@@ -35,7 +38,6 @@ app.post('/api/relate', function (req, res) {
 
 app.get('/api/commit/:commit_id', function(req, res) {
     console.log("Looking up data for commit id: " + req.params.commit_id);
-    var repo = nodegit.Repository.open(config.repo_dir);
     var commit_spec = req.params.commit_id;
     repo.then(function (repo) {
         nodegit.Revparse.single(repo, req.params.commit_id).then(function(object) {
