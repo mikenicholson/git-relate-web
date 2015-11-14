@@ -1,3 +1,4 @@
+'use strict';
 var express = require('express'),
     bodyparser = require('body-parser'),
     config = require('./config'),
@@ -6,20 +7,29 @@ var express = require('express'),
     morgan = require('morgan'),
     nodegit = require('nodegit'),
     RepoCloner = require('./lib/repocloner.js'),
-    RepoUpdater = require('./lib/repoupdater.js');
+    PeriodicTask = require('./lib/periodictask.js');
 
-var repo = new RepoCloner(config.repo_url, config.data_dir, config.authOpts).repo();
-var fetcher = new RepoUpdater(repo, config.authOpts, config.fetchIntervalMinutes);
-repo.then(function (repo)  {
-    fetcher.start()
+// Clone or open the repository
+var repoCloner = new RepoCloner(config.repo_url, config.data_dir, config.authOpts);
+var repo = repoCloner.repo();
+
+// If successful start fetching the repo periodicly
+var fetcherTask = null;
+repo.then(function () {
+    fetcherTask = new PeriodicTask(config.fetchIntervalMinutes, function() { 
+        repoCloner.fetch();
+    });
+    fetcherTask.start();
 });
+
+
 
 var app = express();
 
 app.use(express.static(__dirname + '/public'));
 app.use('/bower_components', express.static(__dirname + '/bower_components'));
 app.use(bodyparser.json());
-app.use(morgan('dev'))
+app.use(morgan('dev'));
 
 app.post('/api/relate', function (req, res) {
     ancestor = req.body.ancestor;
@@ -71,9 +81,12 @@ app.get('/api/commit/:commit_id', function(req, res) {
     });
 });
 
+
+
 app.get('*', function(req, res) {
     res.sendFile(__dirname + '/public/index.html');
 });
+
 
 
 var server = app.listen(3000, function() {
