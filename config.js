@@ -9,7 +9,8 @@ var config = {
         publicKeyPath: process.env.HOME + "/.ssh/id_rsa.pub",
         privateKeyPath: process.env.HOME + "/.ssh/id_rsa",
         passphrase: "",
-    }
+    },
+    fetchIntervalMinutes: 5
 };
 
 module.exports = config

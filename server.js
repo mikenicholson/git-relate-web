@@ -5,9 +5,14 @@ var express = require('express'),
     util = require('util'),
     morgan = require('morgan'),
     nodegit = require('nodegit'),
-    RepoCloner = require('./lib/repocloner.js');
+    RepoCloner = require('./lib/repocloner.js'),
+    RepoUpdater = require('./lib/repoupdater.js');
 
 var repo = new RepoCloner(config.repo_url, config.data_dir, config.authOpts).repo();
+var fetcher = new RepoUpdater(repo, config.authOpts, config.fetchIntervalMinutes);
+repo.then(function (repo)  {
+    fetcher.start()
+});
 
 var app = express();
 
