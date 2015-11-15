@@ -32,11 +32,11 @@ app.use(bodyparser.json());
 app.use(morgan('dev'));
 
 app.post('/api/relate', function (req, res) {
-    ancestor = req.body.ancestor;
-    descendant = req.body.descendant;
+    var ancestor = req.body.ancestor;
+    var descendant = req.body.descendant;
 
-    opts = { cwd: config.repo_dir };
-    cmd = util.format("git merge-base --is-ancestor %s %s", ancestor, descendant)
+    var opts = { cwd: config.repo_dir };
+    var cmd = util.format("git merge-base --is-ancestor %s %s", ancestor, descendant)
     child_process.exec(cmd, opts, function(err, stdout, stderr) {
         var result; 
         if (err) {
@@ -63,7 +63,7 @@ app.get('/api/commit/:commit_id', function(req, res) {
             }
         }).then(function (commit) {
             console.log(commit.summary());
-            commit_json = {
+            var commit_json = {
                 author_name: commit.author().name(),
                 author_email: commit.author().email(),
                 date: commit.date(),
