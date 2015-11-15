@@ -36,7 +36,7 @@ app.post('/api/relate', function (req, res) {
     var descendant = req.body.descendant;
 
     var opts = { cwd: config.repo_dir };
-    var cmd = util.format("git merge-base --is-ancestor %s %s", ancestor, descendant)
+    var cmd = util.format("ANCESTOR='%s' DESCENDANT='%s' git merge-base --is-ancestor \"$ANCESTOR\" \"$DESCENDANT\"", ancestor, descendant);
     child_process.exec(cmd, opts, function(err, stdout, stderr) {
         var result; 
         if (err) {
