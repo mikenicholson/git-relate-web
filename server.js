@@ -2,12 +2,11 @@
 var express = require('express'),
     bodyparser = require('body-parser'),
     config = require('./config'),
-    child_process = require('child_process'),
-    util = require('util'),
     morgan = require('morgan'),
     nodegit = require('nodegit'),
     RepoCloner = require('./lib/repocloner.js'),
-    PeriodicTask = require('./lib/periodictask.js');
+    PeriodicTask = require('./lib/periodictask.js'),
+    RelateCommits = require('./lib/relate.js');
 
 // Clone or open the repository
 var repoCloner = new RepoCloner(config.repo_url, config.data_dir, config.authOpts);
@@ -23,6 +22,12 @@ repo.then(function () {
 });
 
 
+var relater = null;
+repo.then(function (r) {
+    relater = new RelateCommits(r);
+});
+
+
 
 var app = express();
 
@@ -32,27 +37,35 @@ app.use(bodyparser.json());
 app.use(morgan('dev'));
 
 app.post('/api/relate', function (req, res) {
-    var ancestor = req.body.ancestor;
-    var descendant = req.body.descendant;
-
-    var opts = { cwd: config.repo_dir };
-    var cmd = util.format("ANCESTOR='%s' DESCENDANT='%s' git merge-base --is-ancestor \"$ANCESTOR\" \"$DESCENDANT\"", ancestor, descendant);
-    child_process.exec(cmd, opts, function(err, stdout, stderr) {
-        var result; 
-        if (err) {
-            result = false;
-        } else {
-            result = true; 
+    var commit1 = req.body.commit1,
+        commit2 = req.body.commit2;
+    var util = require('util');
+    relater.relate(commit1, commit2).then(function (relationship) {
+        var serializedRelationship = null;
+        switch (relationship) {
+            case RelateCommits.relationship.NONE:
+                serializedRelationship =  'none';
+                break;
+            case RelateCommits.relationship.ANCESTOR:
+                serializedRelationship = 'ancestor';
+                break;
+            case RelateCommits.relationship.DESCENDANT:
+                serializedRelationship = 'descendant';
+                break;
         }
-
-        res.send({result: result}); 
+        res.json({
+            commit1: commit1,
+            commit2: commit2,
+            relationship:  serializedRelationship
+        });
+    }).catch(function (err) {
+        res.status(400);
+        res.json({ error: err.message });
     });
-
 });
 
 
 app.get('/api/commit/:commit_id', function(req, res) {
-    console.log("Looking up data for commit id: " + req.params.commit_id);
     var commit_spec = req.params.commit_id;
     repo.then(function (repo) {
         nodegit.Revparse.single(repo, req.params.commit_id).then(function(object) {
@@ -62,7 +75,6 @@ app.get('/api/commit/:commit_id', function(req, res) {
                 throw Error(commit_spec + " does not represent a valid git commit");
             }
         }).then(function (commit) {
-            console.log(commit.summary());
             var commit_json = {
                 author_name: commit.author().name(),
                 author_email: commit.author().email(),

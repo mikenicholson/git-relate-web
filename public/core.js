@@ -11,10 +11,9 @@ isNewer.controller('mainController', function ($scope, $http) {
     $scope.checkIsNewer = function(callback) {
         $http.post('/api/relate', $scope.formData)
             .success(function(data) {
-                ancestor = $scope.formData.ancestor;
-                descendant = $scope.formData.descendant;
-                console.log(data);
-                callback(ancestor, descendant, data.result);
+                var commit1 = $scope.formData.commit1;
+                    commit2 = $scope.formData.commit2;
+                callback(commit1, commit2, data.relationship);
             })
             .error(function(data) {
                 console.log("Error: " + data);
@@ -23,42 +22,35 @@ isNewer.controller('mainController', function ($scope, $http) {
 
 
     $scope.updateRelationship = function() {
-        console.log("Inside update relationship");
         if ($scope.commit1 && $scope.commit2) {
-            console.log("Do have both commits.");
-            $scope.checkIsNewer(function(ancestor, descendant, result) {
-                if (result) {
-                    $scope.bannerMessage = descendant + " is newer than " + ancestor;
-                } else {
-                    $scope.bannerMessage = descendant + " is not newer than " + ancestor;
+            $scope.checkIsNewer(function(commit1, commit2, result) {
+                switch(result) {
+                case 'none':
+                    $scope.bannerMessage = commit1 + " and " + commit2 + " are not in the same branch.";
+                    break;
+                case 'ancestor':
+                    $scope.bannerMessage = commit1 + " is older than " + commit2;
+                    break;
+                case 'descendant':
+                    $scope.bannerMessage = commit1 + " is newer than " + commit2;
+                    break;
                 }
             });
         } else {
             $scope.bannerMessage = DEFAULT_BANNER;
             $scope.result = null;
-            console.log("Don't have both commits");
         }
     };
 
 
-    $scope.updateAncestor = function() {
-        var ancestor = $scope.formData.ancestor;
-        console.log("UpdateAncestor called with: " + ancestor);
-        $scope.tryLookupRev(ancestor, function(commit_data) {
-            $scope.commit1 = commit_data;
+    $scope.updateCommit = function(commit_name) {
+        var commit = $scope.formData[commit_name];
+        $scope.tryLookupRev(commit, function(commit_data) {
+            $scope[commit_name] = commit_data;
             $scope.updateRelationship();
         });
     };
 
-
-    $scope.updateDescendant = function() {
-        var descendant = $scope.formData.descendant;
-        console.log('UpdateDescendant called with' + descendant);
-        $scope.tryLookupRev(descendant, function(commit_data) {
-            $scope.commit2 = commit_data;
-            $scope.updateRelationship();
-        });
-    };
 
 
     $scope.tryLookupRev = function(rev_name, callback) {
