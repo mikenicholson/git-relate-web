@@ -1,0 +1,10 @@
+.col-centered {
+    margin: 0 auto;
+    display:block;
+}
+.input-minimal {
+    border-top-width: 0px;
+    border-right-width: 0px;
+    border-left-width: 0px;
+    background-color: transparent;
+}
