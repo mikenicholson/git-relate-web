@@ -1,4 +1,4 @@
-FROM node:5
+FROM node:4.2.2
 
 # Bundle app source
 COPY . /src
@@ -9,7 +9,9 @@ RUN rm -rf /src/bower_components
 
 # Install app dependencies
 RUN cd /src; npm install
-RUN cd /src; bower install
+
+RUN npm install -g bower
+RUN cd /src; bower install --allow-root
 
 # Expose the applications default port
 EXPOSE 3000
