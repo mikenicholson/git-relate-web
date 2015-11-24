@@ -52,6 +52,9 @@ app.post('/api/relate', function (req, res) {
             case RelateCommits.relationship.DESCENDANT:
                 serializedRelationship = 'descendant';
                 break;
+            case RelateCommits.relationship.EQUAL:
+                serializedRelationship = 'equal';
+                break;
         }
         res.json({
             commit1: commit1,

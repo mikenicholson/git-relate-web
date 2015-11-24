@@ -34,6 +34,9 @@ isNewer.controller('mainController', function ($scope, $http) {
                 case 'descendant':
                     $scope.bannerMessage = commit1 + " is newer than " + commit2;
                     break;
+                case 'equal':
+                    $scope.bannerMessage = commit1 + " is equal to " + commit2;
+                    break;
                 }
             });
         } else {
