@@ -98,7 +98,7 @@ app.get('/api/commit/:commit_id', function(req, res) {
 
 
 
-app.get('*', function(req, res) {
+app.get('/', function(req, res) {
     res.sendFile(__dirname + '/public/index.html');
 });
 
