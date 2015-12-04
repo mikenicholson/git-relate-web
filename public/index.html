@@ -21,6 +21,8 @@
        <div class="row text-center">
             <h3>{{bannerMessage}}</h3>
        </div>
+
+       <!-- Commit text inputs -->
        <div class="row">
             <form>
                 <div class="col-xs-6">
@@ -32,20 +34,12 @@
             </form>
         </div>
 
+        <!-- Commit details -->
         <div class="row">
-            <div class="col-xs-6">
-                id: {{commit1.id}}<br/>
-                author: {{commit1.author_name}}<br/>
-                date: {{commit1.date | date:'medium'}}<br/>
-                message: <pre>{{commit1.message}}</pre><br/>
+            <div class="col-xs-6" ng-repeat="commit in [commit1, commit2]">
+                <commit-details commit-info="commit"></commit-details>
             </div>
-            <div class="col-xs-6">
-                id: {{commit2.id}}<br/>
-                author: {{commit2.author_name}}<br/>
-                date: {{commit2.date | date:'medium'}}<br/>
-                message: <pre>{{commit2.message}}</pre><br/>
-            </div>  
-        </div> <!-- row -->
+        </div>
 
     </div> <!-- contianer -->
 </body>

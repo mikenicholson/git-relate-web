@@ -1,11 +1,13 @@
-var isNewer = angular.module('relate', []);
+(function () {
 
-isNewer.controller('mainController', function ($scope, $http) {
+var app = angular.module('relate', []);
+
+app.controller('mainController', function ($scope, $http) {
     var DEFAULT_BANNER = "Enter two commits to compare them"
     $scope.formData = {};
     $scope.result = null;
-    $scope.commit1 = null;
-    $scope.commit2 = null;
+    $scope.commit1 = {};
+    $scope.commit2 = {};
     $scope.bannerMessage = DEFAULT_BANNER;
 
     $scope.checkIsNewer = function(callback) {
@@ -72,3 +74,21 @@ isNewer.controller('mainController', function ($scope, $http) {
     };
 
 });
+
+
+app.directive('commitDetails', function() {
+    return {
+        restrict: 'E',
+        templateUrl:  'template/commit-details.html',
+        scope: {
+            commitInfo: '='
+        },
+        link: function (scope, elem, attrs) {
+            scope.$watch(attrs['commitInfo'], function (v) {
+                console.info("New value is", v);
+            });
+        }
+    };
+});
+
+})();
